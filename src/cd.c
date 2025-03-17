@@ -22,7 +22,7 @@ int do_cd(char **argv, char **env)
     if (chdir(temp[0]) == 0)
         return 0;
     perror("cd");
-    return 1;
+    return 84;
 }
 
 char **setenvi(char **argv, char **env)

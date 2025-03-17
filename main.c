@@ -25,7 +25,7 @@ static int verif_command(char **argv, char **env)
         return 84;
     if (my_strncmp(argv[0], "", 1) == 0)
         return 0;
-    return exec_bin(var_remove_space(strtok(argv[0], ' ')), env);
+    return exec_bin(argv, env);
 }
 
 char **actu_command(char **argv, char **env, int nbr_exec)
@@ -62,8 +62,10 @@ static stock_t *handling_command(char **argv, stock_t *var)
 
     for (int i = 0; i != nbr_separator(argv); i++) {
         temp = actu_command(argv, var->envi, nbr_exec);
-        var->envi = command_env(temp, var->envi);
-        if (verif_command(temp, var->envi) == 84) {
+        var->envi = command_env(var_remove_space(strtok(argv[0], ' '))
+        , var->envi);
+        if (verif_command(var_remove_space(strtok(argv[0], ' ')), var->envi)
+        == 84) {
             var->status = 84;
             return var;
         }
@@ -82,7 +84,7 @@ stock_t *isatty_0(int argc, char **argv, stock_t *var)
         input_user = read_input(argc, argv);
         if (var->status == 84)
             return var;
-        if (input_user != NULL)
+        if (input_user != NULL && input_user[0] != '\0')
             var = handling_command(right_argv(input_user), var);
         else {
             var->status = 0;
@@ -115,8 +117,6 @@ int main(int argc, char **argv, char **env)
             return 0;
     }
 }
-
-
 
 /*
 {ls; ls}

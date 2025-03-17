@@ -47,6 +47,9 @@ int exec_bin(char **argv, char **env)
         if (status > 0)
             return 0;
     }
+    status += exec_bin2(argv[0], argv, env);
+    if (status > 0)
+        return 0;
     mini_printf("%s: Command not found.\n", argv[0]);
     return 84;
 }
