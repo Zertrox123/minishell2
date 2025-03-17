@@ -25,17 +25,18 @@ static int verif_command(char **argv, char **env)
         return 84;
     if (my_strncmp(argv[0], "", 1) == 0)
         return 0;
-    return exec_bin(argv, env);
+    return exec_bin(var_remove_space(strtok(argv[0], ' ')), env);
 }
 
 char **actu_command(char **argv, char **env, int nbr_exec)
 {
-    char **tab = malloc(sizeof(char *) * 25);
+    char **tab = malloc(sizeof(char *) * 50);
     int i = start_with_exec(nbr_exec, argv);
     int a = 0;
 
     for (; argv[i] != NULL; i++) {
-        if (my_strncmp(argv[i], "&&", 2) == 0)
+        if (my_strncmp(argv[i], "&&", 2) == 0 ||
+        my_strncmp(argv[i], ";", 1) == 0)
             return tab;
         tab[a] = my_strdup(argv[i]);
         a++;
@@ -82,7 +83,7 @@ stock_t *isatty_0(int argc, char **argv, stock_t *var)
         if (var->status == 84)
             return var;
         if (input_user != NULL)
-            var = handling_command(strtok(input_user, ' '), var);
+            var = handling_command(right_argv(input_user), var);
         else {
             var->status = 0;
             return var;
@@ -107,10 +108,27 @@ int main(int argc, char **argv, char **env)
     while (1) {
         mini_printf("\033[36m%s\033[0m - $> ", getcwd(buffer, 4096));
         input_user = read_input(argc, argv);
-        handling_command(strtok(input_user, ' '), ht);
+        handling_command(right_argv(input_user), ht);
         if (ht->status == 84)
             return 84;
         if (ht->status == 2)
             return 0;
     }
 }
+
+
+
+/*
+{ls; ls}
+[[ls]] exec
+[[ls]] exec
+
+{    ls  ;   ls}
+[[ls]] exec
+[[ls]] exec
+
+{    ls    -l ; ls}
+[[ls]
+[-l]] exec
+[[ls]] exec
+*/

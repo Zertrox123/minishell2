@@ -36,7 +36,8 @@ int start_with_exec(int nbr_exec, char **argv)
     if (nbr_exec == 0)
         return 0;
     for (int i = 0; i != nbr_exec; i++) {
-        while (my_strncmp(argv[a], "&&", 2) != 0 && argv[a] != NULL)
+        while (my_strncmp(argv[a], "&&", 2) != 0 && argv[a] != NULL
+        && my_strncmp(argv[a], ";", 1) != 0)
             a++;
         a++;
     }
@@ -48,7 +49,8 @@ int nbr_separator(char **argv)
     int separator = 0;
 
     for (int i = 0; argv[i] != NULL; i++) {
-        if (my_strncmp(argv[i], "&&", 2) == 0)
+        if (my_strncmp(argv[i], "&&", 2) == 0 ||
+        my_strncmp(argv[i], ";", 1) == 0)
             separator++;
     }
     return separator + 1;
