@@ -21,7 +21,7 @@ int do_cd(char **argv, char **env)
         return 0;
     if (chdir(temp[0]) == 0)
         return 0;
-    perror("cd");
+    mini_printf("%s: No such file or directory.\n", temp[0]);
     return 84;
 }
 
