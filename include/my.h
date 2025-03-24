@@ -13,8 +13,10 @@ typedef struct stock_i {
     char **envi;
 } stock_t;
 
+int exec_bin2(char *one_path, char **argv, char **env);
 int my_strncmp(char const *s1, char const *s2, int n);
 int start_with_exec(int nbr_exec, char **argv);
+int start_with_pipe(int nbr_exec, char **argv);
 int my_strcmp(char const *s1, char const *s2);
 char *my_strcat(char *dest, char const *src);
 char **strtok(char *buffer, char character);

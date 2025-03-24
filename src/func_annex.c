@@ -55,3 +55,17 @@ int nbr_separator(char **argv)
     }
     return separator + 1;
 }
+
+int start_with_pipe(int nbr_exec, char **argv)
+{
+    int a = 0;
+
+    if (nbr_exec == 0)
+        return 0;
+    for (int i = 0; i != nbr_exec; i++) {
+        while (my_strncmp(argv[a], "|", 1) != 0 && argv[a] != NULL)
+            a++;
+        a++;
+    }
+    return a;
+}
