@@ -10,8 +10,19 @@
 #include <stdio.h>
 #include "../include/my.h"
 
+char *setup_oldpath(char *old_path, char *wait, char **temp)
+{
+    if (old_path == "")
+        old_path = wait;
+    else
+        old_path = temp[0];
+    return old_path;
+}
+
 int do_cd(char **argv, char **env)
 {
+    static char *old_path = "";
+    char *wait;
     char **temp;
 
     if (argv[1] == NULL && chdir("/home") == 0)
@@ -19,8 +30,13 @@ int do_cd(char **argv, char **env)
     temp = strtok(argv[1], '\n');
     if (temp[0][0] == '~' && chdir("/home") == 0)
         return 0;
-    if (chdir(temp[0]) == 0)
+    if (temp[0][0] == '-' && chdir(old_path) == 0)
         return 0;
+    wait = getcwd(NULL, 4096);
+    if (chdir(temp[0]) == 0) {
+        old_path = setup_oldpath(old_path, wait, temp);
+        return 0;
+    }
     mini_printf("%s: No such file or directory.\n", temp[0]);
     return 84;
 }
