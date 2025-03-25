@@ -18,6 +18,7 @@ SRC	=	lib/miniprintf.c	\
 		src/parsing_env.c	\
 		src/func_annex.c	\
 		src/correct_argv.c	\
+		lib/my_str_isalpha.c	\
 		main.c	\
 
 OBJ = $(SRC:.c=.o)

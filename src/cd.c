@@ -33,7 +33,13 @@ char **setenvi(char **argv, char **env)
 
     if (argv[1] == NULL)
         return env;
-    for (; tab[i] != NULL; i++);
+    if (my_str_isalpha(argv[1]) == 1)
+        return env;
+    for (; tab[i] != NULL; i++) {
+        if (my_strncmp(tab[i], argv[1], my_strlen(argv[1]) - 1) == 0
+        && tab[i][my_strlen(argv[1])] == '=')
+            return env;
+    }
     av = my_strcomb(argv[1], "=");
     if (argv[2] != NULL)
         av = my_strcomb(av, argv[2]);
