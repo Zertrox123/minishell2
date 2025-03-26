@@ -58,7 +58,7 @@ static stock_t *handling_command(char **argv, stock_t *var)
     int nbr_exec = 0;
     int exec = 0;
 
-    for (int i = 0; i != nbr_separator(argv) + 1; i++) {
+    for (int i = 0; i < nbr_separator(argv); i++) {
         if (my_strncmp(argv[i], ";", 1) == 0)
             i++;
         temp = actu_command(argv, var->envi, nbr_exec);
@@ -110,7 +110,7 @@ int main(int argc, char **argv, char **env)
     while (1) {
         mini_printf("\033[36m%s\033[0m - $> ", getcwd(buffer, 4096));
         input_user = read_input(argc, argv);
-        handling_command(right_argv(input_user), ht);
+        ht = handling_command(right_argv(input_user), ht);
         if (ht->status == 84)
             return 84;
         if (ht->status == 2)
