@@ -65,30 +65,37 @@ int do_pipe(char *one_path, char **arg0, char **arg1, char **env)
         dup2(pipes[1], STDOUT_FILENO);
         close(pipes[1]);
         execve(one_path, arg0, env);
-        exit(EXIT_SUCCESS);
+        exit(EXIT_FAILURE);
     } else {
         close(pipes[1]);
         dup2(pipes[0], STDIN_FILENO);
         close(pipes[0]);
         execve(second_path, arg1, env);
-        exit(EXIT_SUCCESS);
+        exit(EXIT_FAILURE);
     }
+    return 0;
 }
 
 int gestion_pipe(char *one_path, char **all_argv, char **env)
 {
-    char **argv;
-    char **argv1;
-    int status = 0;
-    int i = 0;
+    char **argv = NULL;
+    char **argv1 = NULL;
+    int wait = 0;
+    pid_t pid;
 
-    for (; i != count_pipe(all_argv); i++) {
-        argv = command_pipe(all_argv, start_with_pipe(i, all_argv));
-        argv1 = command_pipe(all_argv, start_with_pipe(i + 1, all_argv));
-        status += do_pipe(my_strcat("/usr/bin/", argv[0]), argv, argv1, env);
+    pid = fork();
+    if (pid == 0) {
+        for (int i = 0; i < count_pipe(all_argv); i++) {
+            argv = command_pipe(all_argv, start_with_pipe(i, all_argv));
+            argv1 = command_pipe(all_argv, start_with_pipe(i + 1, all_argv));
+            do_pipe(my_strcat("/usr/bin/", argv[0]), argv, argv1, env);
+        }
+    } else {
+        waitpid(pid, &wait, 0);
+        if (WIFEXITED(wait) && WEXITSTATUS(wait) == 0)
+            return 0;
     }
-    status += do_pipe(my_strcat("/usr/bin/", argv[0]), argv, argv1, env);
-    return 0;
+    return 1;
 }
 
 int exec_bin2(char *one_path, char **argv, char **env)
@@ -131,5 +138,5 @@ int exec_bin(char **argv, char **env)
     if (status > 0)
         return 0;
     mini_printf("%s: Command not found.\n", argv[0]);
-    return 84;
+    return 1;
 }

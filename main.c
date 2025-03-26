@@ -58,6 +58,7 @@ static stock_t *handling_command(char **argv, stock_t *var)
     int nbr_exec = 0;
     int exec = 0;
 
+    var->status = 0;
     for (int i = 0; i < nbr_separator(argv); i++) {
         if (my_strncmp(argv[i], ";", 1) == 0)
             i++;
@@ -65,13 +66,12 @@ static stock_t *handling_command(char **argv, stock_t *var)
         var->envi = command_env(var_remove_space(strtok(argv[i], ' '))
         , var->envi);
         if (verif_command(var_remove_space(strtok(argv[i], ' ')), var->envi)
-        == 84) {
-            var->status = 84;
+        == 1) {
+            var->status = 1;
             return var;
         }
         nbr_exec++;
     }
-    var->status = 0;
     return var;
 }
 
@@ -84,6 +84,8 @@ stock_t *isatty_0(int argc, char **argv, stock_t *var)
         input_user = read_input(argc, argv);
         if (var->status == 84)
             return var;
+        if (var->status == 1)
+            return var;
         if (input_user != NULL && input_user[0] != '\0')
             var = handling_command(right_argv(input_user), var);
         else {
@@ -91,7 +93,6 @@ stock_t *isatty_0(int argc, char **argv, stock_t *var)
             return var;
         }
     }
-    var->status = 0;
     return var;
 }
 
