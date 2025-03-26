@@ -17,10 +17,8 @@ static int verif_command(char **argv, char **env)
         return 0;
     if (my_strncmp(argv[0], "unsetenv", 8) == 0)
         return 0;
-    if (my_strncmp(argv[0], "cd", 2) == 0) {
-        do_cd(argv, env);
-        return 0;
-    }
+    if (my_strncmp(argv[0], "cd", 2) == 0)
+        return do_cd(argv, env);
     if (my_strncmp(argv[0], "exit", 4) == 0)
         return 84;
     if (my_strncmp(argv[0], "", 1) == 0)
@@ -60,11 +58,13 @@ static stock_t *handling_command(char **argv, stock_t *var)
     int nbr_exec = 0;
     int exec = 0;
 
-    for (int i = 0; i != nbr_separator(argv); i++) {
+    for (int i = 0; i != nbr_separator(argv) + 1; i++) {
+        if (my_strncmp(argv[i], ";", 1) == 0)
+            i++;
         temp = actu_command(argv, var->envi, nbr_exec);
-        var->envi = command_env(var_remove_space(strtok(argv[0], ' '))
+        var->envi = command_env(var_remove_space(strtok(argv[i], ' '))
         , var->envi);
-        if (verif_command(var_remove_space(strtok(argv[0], ' ')), var->envi)
+        if (verif_command(var_remove_space(strtok(argv[i], ' ')), var->envi)
         == 84) {
             var->status = 84;
             return var;
@@ -131,4 +131,7 @@ int main(int argc, char **argv, char **env)
 [[ls]
 [-l]] exec
 [[ls]] exec
+
+    for (int i = 0; argv[i] != NULL; i++)
+        mini_printf("%s\n", argv[i])
 */
