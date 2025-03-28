@@ -44,17 +44,6 @@ char **var_remove_space(char **argv)
     return tab;
 }
 
-int nbr_sp(char *buffer)
-{
-    int nbr = 0;
-
-    for (int i = 0; buffer[i] != '\0'; i++) {
-        if (buffer[i] == ';')
-            nbr++;
-    }
-    return nbr;
-}
-
 char **right_argv(char *buffer)
 {
     return strtok(buffer, ';');

@@ -29,35 +29,6 @@ char *read_input(int argc, char **argv)
     return real;
 }
 
-int start_with_exec(int nbr_exec, char **argv)
-{
-    int a = 0;
-    static int st = 0;
-
-    if (nbr_exec == 0)
-        return 0;
-    for (int i = 0; i != nbr_exec; i++) {
-        while (my_strncmp(argv[a], "&&", 2) != 0 && argv[a] != NULL
-        && my_strncmp(argv[a], ";", 1) != 0)
-            a++;
-        a++;
-    }
-    st++;
-    return a;
-}
-
-int nbr_separator(char **argv)
-{
-    int separator = 0;
-
-    for (int i = 0; argv[i + 1] != NULL; i++) {
-        if (my_strncmp(argv[i], ";", 1) == 0 &&
-        my_strncmp(argv[i + 1], ";", 1) != 0)
-            separator++;
-    }
-    return separator;
-}
-
 int start_with_pipe(int nbr_exec, char **argv)
 {
     int a = 0;

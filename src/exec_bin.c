@@ -139,9 +139,3 @@ int exec_bin(char **argv, char **env)
     mini_printf("%s: Command not found.\n", argv[0]);
     return 1;
 }
-
-/*
-ls                   ; ls
-ls; ls; ls; ls
-
-*/
