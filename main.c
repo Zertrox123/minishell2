@@ -35,22 +35,6 @@ char **command_env(char **argv, char **env)
     return env;
 }
 
-char **actu_command(char **argv, char **env, int nbr_exec)
-{
-    char **tab = malloc(sizeof(char *) * 50);
-    int a = 0;
-
-    for (int i = nbr_exec; argv[i] != NULL; i++) {
-        if (my_strncmp(argv[i], ";", 1) == 0 &&
-        my_strncmp(argv[i + 1], ";", 1) != 0)
-            return tab;
-        tab[a] = my_strdup(argv[i]);
-        a++;
-    }
-    tab[a] = NULL;
-    return tab;
-}
-
 static stock_t *handling_command(char **argv, stock_t *var)
 {
     var->status = 0;
