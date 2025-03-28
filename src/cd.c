@@ -10,13 +10,11 @@
 #include <stdio.h>
 #include "../include/my.h"
 
-char *setup_oldpath(char *old_path, char *wait, char **temp)
+char **print_env(char **env)
 {
-    if (old_path == "")
-        old_path = wait;
-    else
-        old_path = temp[0];
-    return old_path;
+    for (int i = 0; env[i] != NULL; i++)
+        mini_printf("%s\n", env[i]);
+    return env;
 }
 
 int do_cd(char **argv, char **env)
@@ -34,7 +32,7 @@ int do_cd(char **argv, char **env)
         return 0;
     wait = getcwd(NULL, 4096);
     if (chdir(temp[0]) == 0) {
-        old_path = setup_oldpath(old_path, wait, temp);
+        old_path = wait;
         return 0;
     }
     mini_printf("%s: No such file or directory.\n", temp[0]);
@@ -48,8 +46,8 @@ char **setenvi(char **argv, char **env)
     int i = 0;
 
     if (argv[1] == NULL)
-        return env;
-    if (my_str_isalpha(argv[1]) == 1)
+        return print_env(env);
+    if (my_str_isalpha(argv[1]) == 1 || argv[3] != NULL)
         return env;
     for (; tab[i] != NULL; i++) {
         if (my_strncmp(tab[i], argv[1], my_strlen(argv[1]) - 1) == 0
