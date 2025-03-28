@@ -31,12 +31,16 @@ char **var_remove_space(char **argv)
     int i = 0;
 
     for (int a = 0; argv[a] != NULL; a++) {
-        if (argv[a][0] != '\0') {
+        if (my_strcmp(remove_space(argv[a]), "") != 0) {
             tab[i] = remove_space(argv[a]);
             i++;
         }
     }
     tab[i] = NULL;
+    for (int p = 0; tab[p] != NULL; p++) {
+        if (my_strncmp(tab[p], "!", 1) == 0)
+            tab[p] = NULL;
+    }
     return tab;
 }
 

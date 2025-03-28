@@ -53,13 +53,10 @@ char **actu_command(char **argv, char **env, int nbr_exec)
 
 static stock_t *handling_command(char **argv, stock_t *var)
 {
-    char **temp;
-
     var->status = 0;
     for (int i = 0; argv[i] != NULL; i++) {
         while (my_strcmp(argv[i], "") == 0)
             i++;
-        temp = actu_command(argv, var->envi, i);
         var->envi = command_env(var_remove_space(strtok(argv[i], ' '))
         , var->envi);
         if (verif_command(var_remove_space(strtok(argv[i], ' ')), var->envi)
