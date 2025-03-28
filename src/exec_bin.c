@@ -130,8 +130,7 @@ int exec_bin(char **argv, char **env)
         return gestion_pipe(my_strcat(my_strdup("/usr/bin/"), argv[0]),
         argv, env);
     for (int i = 0; real_path[i] != NULL; i++) {
-        one_path = my_strcat(real_path[i], "/");
-        one_path = my_strcat(one_path, temp_arg[0]);
+        one_path = my_strcat(my_strcat(real_path[i], "/"), temp_arg[0]);
         status += exec_bin2(one_path, argv, env);
     }
     status += exec_bin2(argv[0], argv, env);
@@ -140,3 +139,9 @@ int exec_bin(char **argv, char **env)
     mini_printf("%s: Command not found.\n", argv[0]);
     return 1;
 }
+
+/*
+ls                   ; ls
+ls; ls; ls; ls
+
+*/

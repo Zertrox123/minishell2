@@ -53,19 +53,5 @@ int nbr_sp(char *buffer)
 
 char **right_argv(char *buffer)
 {
-    char **argv = strtok(buffer, ';');
-    int nbr_separat = nbr_sp(buffer);
-    char **st = malloc(sizeof(char *) * (nbr_separat + 2));
-    int a = 0;
-
-    for (int i = 0; argv[i] != NULL; i++) {
-        st[a] = argv[i];
-        a++;
-        if (argv[i + 1] != NULL) {
-            st[a] = my_strdup(";");
-            a++;
-        }
-    }
-    st[a] = NULL;
-    return st;
+    return strtok(buffer, ';');
 }

@@ -21,7 +21,6 @@ char *getpath(char **env)
             return buffer;
         }
     }
-    free(buffer);
     return "";
 }
 

@@ -26,23 +26,6 @@ static int verif_command(char **argv, char **env)
     return exec_bin(argv, env);
 }
 
-char **actu_command(char **argv, char **env, int nbr_exec)
-{
-    char **tab = malloc(sizeof(char *) * 50);
-    int i = start_with_exec(nbr_exec, argv);
-    int a = 0;
-
-    for (; argv[i] != NULL; i++) {
-        if (my_strncmp(argv[i], "&&", 2) == 0 ||
-        my_strncmp(argv[i], ";", 1) == 0)
-            return tab;
-        tab[a] = my_strdup(argv[i]);
-        a++;
-    }
-    tab[i] = NULL;
-    return tab;
-}
-
 char **command_env(char **argv, char **env)
 {
     if (my_strncmp(argv[0], "setenv", 6) == 0)
@@ -52,17 +35,32 @@ char **command_env(char **argv, char **env)
     return env;
 }
 
+char **actu_command(char **argv, char **env, int nbr_exec)
+{
+    char **tab = malloc(sizeof(char *) * 50);
+    int a = 0;
+
+    for (int i = nbr_exec; argv[i] != NULL; i++) {
+        if (my_strncmp(argv[i], ";", 1) == 0 &&
+        my_strncmp(argv[i + 1], ";", 1) != 0)
+            return tab;
+        tab[a] = my_strdup(argv[i]);
+        a++;
+    }
+    tab[a] = NULL;
+    return tab;
+}
+
 static stock_t *handling_command(char **argv, stock_t *var)
 {
     char **temp;
-    int nbr_exec = 0;
-    int exec = 0;
 
     var->status = 0;
-    for (int i = 0; i < nbr_separator(argv); i++) {
-        if (my_strncmp(argv[i], ";", 1) == 0)
+
+    for (int i = 0; argv[i] != NULL; i++) {
+        while (my_strcmp(argv[i], "") == 0)
             i++;
-        temp = actu_command(argv, var->envi, nbr_exec);
+        temp = actu_command(argv, var->envi, i);
         var->envi = command_env(var_remove_space(strtok(argv[i], ' '))
         , var->envi);
         if (verif_command(var_remove_space(strtok(argv[i], ' ')), var->envi)
@@ -70,7 +68,6 @@ static stock_t *handling_command(char **argv, stock_t *var)
             var->status = 1;
             return var;
         }
-        nbr_exec++;
     }
     return var;
 }
@@ -118,21 +115,3 @@ int main(int argc, char **argv, char **env)
             return 0;
     }
 }
-
-/*
-{ls; ls}
-[[ls]] exec
-[[ls]] exec
-
-{    ls  ;   ls}
-[[ls]] exec
-[[ls]] exec
-
-{    ls    -l ; ls}
-[[ls]
-[-l]] exec
-[[ls]] exec
-
-    for (int i = 0; argv[i] != NULL; i++)
-        mini_printf("%s\n", argv[i])
-*/

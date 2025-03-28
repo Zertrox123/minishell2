@@ -80,3 +80,13 @@ char **unsetenvi(char **argv, char **env)
     tab[a] = NULL;
     return tab;
 }
+
+/*
+setenv
+unsetenv PATH
+setenv caca pipi popo
+unsetenv
+setenv lol@gmail.com
+
+cd -
+*/
