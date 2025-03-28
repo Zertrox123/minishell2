@@ -56,7 +56,6 @@ static stock_t *handling_command(char **argv, stock_t *var)
     char **temp;
 
     var->status = 0;
-
     for (int i = 0; argv[i] != NULL; i++) {
         while (my_strcmp(argv[i], "") == 0)
             i++;
