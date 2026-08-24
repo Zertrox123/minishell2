@@ -1,33 +1,16 @@
 # Minishell 2
 
-Interpréteur de commandes Unix développé en C.
+Un interpréteur de commandes Unix complet fait en C.
 
-## Présentation
+Fonctionnalités :
+- Exécution des commandes système avec gestion du PATH
+- Gestion des builtins (`cd`, `env`, `setenv`, `unsetenv`, `exit`, `echo`)
+- Pipes multiples (`|`) et redirections (`<`, `>`, `>>`, `<<`)
+- Séparateurs et opérateurs logiques (`;`, `&&`, `||`)
 
-Minishell 2 (B-PSU-200) est une reproduction d'un shell POSIX capable d'exécuter des commandes système et d'enchaîner des opérations complexes.
-
-Fonctionnalités gérées :
-- Exécution des commandes via `fork`, `execve` et `waitpid`.
-- Résolution du `PATH` et gestion dynamique de l'environnement (`env`, `setenv`, `unsetenv`).
-- Pipes multiples (`cmd1 | cmd2 | cmd3`).
-- Redirections d'entrées et sorties (`<`, `>`, `>>`, `<<`).
-- Opérateurs logiques et séparateurs (`;`, `&&`, `||`).
-- Commandes internes intégrées (`cd`, `exit`, `echo`, `env`).
-
-## Prérequis
-
-- GCC
-- Make
-
-## Compilation et Lancement
+## Build et lancement
 
 ```bash
-# Compiler le projet
 make
-
-# Lancer le shell interactif
 ./mysh
-
-# Exemple d'utilisation dans le shell
-mysh> ls -la | grep src > output.txt && cat output.txt
 ```
