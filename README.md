@@ -1,6 +1,6 @@
 # Minishell 2
 
-Un interpréteur de commandes Unix complet fait en C.
+Un interpréteur de commandes Unix complet fait en C
 
 Fonctionnalités :
 - Exécution des commandes système avec gestion du PATH
